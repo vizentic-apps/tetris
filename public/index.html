@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tetris</title>
+  <meta name="description" content="Tetris jouable hors ligne, installable sur l'écran d'accueil.">
+  <meta name="theme-color" content="#0b0f17">
+  <meta name="color-scheme" content="dark">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Tetris">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  <main class="app" id="app">
+    <div class="side left">
+    <section class="panel hold" aria-labelledby="holdLabel">
+      <h2 id="holdLabel">Réserve</h2>
+      <canvas id="hold" aria-hidden="true"></canvas>
+    </section>
+
+    <dl class="stats" aria-label="Statistiques">
+      <div class="stat score"><dt>Score</dt><dd id="score">0</dd></div>
+      <div class="stat"><dt>Niveau</dt><dd id="level">1</dd></div>
+      <div class="stat"><dt>Lignes</dt><dd id="lines">0</dd></div>
+      <div class="stat best"><dt>Meilleur</dt><dd id="best">0</dd></div>
+    </dl>
+    </div>
+
+    <div class="side right">
+    <section class="panel next" aria-labelledby="nextLabel">
+      <h2 id="nextLabel">Suivante</h2>
+      <canvas id="next" aria-hidden="true"></canvas>
+    </section>
+
+    <div class="aside">
+      <button type="button" class="btn ghost" id="pauseBtn">Pause</button>
+      <p class="keys" aria-label="Commandes clavier">
+        <span><kbd>←</kbd><kbd>→</kbd> déplacer</span>
+        <span><kbd>↑</kbd> / <kbd>X</kbd> tourner</span>
+        <span><kbd>Z</kbd> tourner ↺</span>
+        <span><kbd>↓</kbd> descendre</span>
+        <span><kbd>Espace</kbd> chute</span>
+        <span><kbd>C</kbd> réserve</span>
+        <span><kbd>P</kbd> pause</span>
+      </p>
+    </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="frame" id="frame">
+        <canvas id="board" role="img" aria-label="Plateau de jeu Tetris : 10 colonnes, 20 lignes"></canvas>
+        <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="ovTitle">
+          <h1 id="ovTitle">Tetris</h1>
+          <p id="ovText">Empile les pièces, complète des lignes.</p>
+          <p id="ovScore" class="ov-score" hidden></p>
+          <button type="button" class="btn primary" id="ovBtn">Jouer</button>
+          <button type="button" class="btn" id="installBtn" hidden>Installer l'application</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="touch" id="touch" aria-label="Commandes tactiles">
+      <button type="button" class="btn t" data-act="left" aria-label="Gauche">◀</button>
+      <button type="button" class="btn t" data-act="right" aria-label="Droite">▶</button>
+      <button type="button" class="btn t" data-act="rotCCW" aria-label="Tourner à gauche">↺</button>
+      <button type="button" class="btn t" data-act="rotCW" aria-label="Tourner à droite">↻</button>
+      <button type="button" class="btn t" data-act="down" aria-label="Descendre">▼</button>
+      <button type="button" class="btn t" data-act="hold" aria-label="Réserve">Réserve</button>
+      <button type="button" class="btn t" data-act="pause" aria-label="Pause">Pause</button>
+      <button type="button" class="btn t accent" data-act="drop" aria-label="Chute rapide">⤓</button>
+    </div>
+  </main>
+  <div class="sr-only" id="live" role="status" aria-live="polite"></div>
+  <noscript><p style="padding:2rem">Ce jeu nécessite JavaScript.</p></noscript>
+</body>
+</html>

@@ -1,0 +1,133 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b0f17;
+  --panel: #121826;
+  --line: #1f2937;
+  --text: #e6edf6;
+  --muted: #8a97ab;
+  --accent: #4cc9f0;
+  --accent-ink: #04202b;
+  --mini: 22px;
+  --gap: 14px;
+  /* largeur du plateau = moitié de la hauteur utile (ratio 1:2) */
+  --stage-w: calc((100vh - 2 * var(--gap)) / 2);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: radial-gradient(1200px 700px at 50% -10%, #17203a 0%, var(--bg) 60%);
+  color: var(--text);
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
+}
+.sr-only { position: absolute; top: 0; left: 0; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+h1, h2, dl, dd, p { margin: 0; }
+
+/* ---------- Layout bureau ---------- */
+@supports (height: 100dvh) { :root { --stage-w: calc((100dvh - 2 * var(--gap)) / 2); } }
+html, body { overflow: hidden; }
+.app {
+  height: 100vh; height: 100dvh;
+  padding: max(var(--gap), env(safe-area-inset-top)) max(var(--gap), env(safe-area-inset-right)) max(var(--gap), env(safe-area-inset-bottom)) max(var(--gap), env(safe-area-inset-left));
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, var(--stage-w)) minmax(0, 11rem);
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: "left stage right";
+  justify-content: center;
+  column-gap: calc(var(--gap) * 2);
+}
+.side { display: flex; flex-direction: column; gap: var(--gap); align-self: start; width: 100%; max-width: 11rem; }
+.side.left { grid-area: left; justify-self: end; }
+.side.right { grid-area: right; justify-self: start; }
+.aside { display: grid; gap: 1rem; }
+.stage { grid-area: stage; min-width: 0; min-height: 0; display: grid; place-items: center; }
+.touch { display: none; grid-area: touch; }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px 12px; }
+.panel h2, .stat dt { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.panel canvas { display: block; margin: 8px auto 0; }
+
+.stats { display: grid; gap: 10px; }
+.hold { grid-area: hold; align-self: start; }
+.next { grid-area: next; align-self: start; }
+.stats { grid-area: stats; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; }
+.stat dd { font: 700 1.5rem/1.2 ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.stat.score dd { font-size: 1.9rem; color: var(--accent); }
+.stat.best dd { color: var(--muted); font-size: 1.1rem; }
+
+.frame { position: relative; border-radius: 10px; overflow: hidden; background: #0e1422; box-shadow: 0 0 0 1px var(--line), 0 24px 60px rgba(0, 0, 0, .55); }
+.frame canvas { display: block; }
+
+.overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .9rem; padding: 1.25rem; text-align: center; background: rgba(8, 11, 18, .86); backdrop-filter: blur(3px); }
+.overlay[hidden] { display: none; }
+.overlay h1 { font-size: clamp(1.8rem, 6vw, 2.6rem); letter-spacing: .08em; text-transform: uppercase; font-weight: 800; }
+.overlay p { color: var(--muted); font-size: .95rem; max-width: 18rem; }
+.ov-score { color: var(--text) !important; font: 700 1.3rem ui-monospace, Menlo, Consolas, monospace !important; }
+
+.btn { font: 600 .95rem/1 inherit; font-family: inherit; color: var(--text); background: #1a2233; border: 1px solid #2a3550; border-radius: 12px; padding: .85rem 1.2rem; min-height: 44px; cursor: pointer; touch-action: manipulation; }
+.btn:hover { background: #222c44; }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; min-width: 11rem; }
+.btn.primary:hover { background: #7ad8f5; }
+.btn.ghost { background: transparent; }
+.btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+.keys { display: grid; gap: 6px; color: var(--muted); font-size: .8rem; }
+kbd { display: inline-block; min-width: 1.6em; padding: .1em .4em; margin-right: .25em; text-align: center; font: 600 .75rem ui-monospace, Menlo, Consolas, monospace; color: var(--text); background: #1a2233; border: 1px solid #2a3550; border-bottom-width: 2px; border-radius: 6px; }
+
+/* ---------- Layout mobile / tactile ---------- */
+@media (max-width: 760px), (pointer: coarse) {
+  :root { --mini: 15px; --gap: 10px; }
+  .app {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "hold  stats next"
+      "stage stage stage"
+      "touch touch touch";
+    column-gap: var(--gap);
+    row-gap: var(--gap);
+  }
+  .side { display: contents; }
+  .hold, .next { padding: 6px 8px 8px; align-self: stretch; }
+  .hold h2, .next h2 { text-align: center; }
+  .stats { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .stat { padding: 6px 10px; }
+  .stat dd { font-size: 1.05rem; }
+  .stat.score { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; }
+  .stat.score dd { font-size: 1.4rem; }
+  .stat.best { display: none; }
+  .aside { display: none; }
+  .touch { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .btn.t { min-height: 54px; padding: .5rem; font-size: 1.25rem; border-radius: 14px; }
+  .btn.t[data-act="hold"], .btn.t[data-act="pause"] { font-size: .85rem; }
+  .btn.t.accent { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+}
+/* Écran large avec souris : jamais de commandes tactiles */
+@media (min-width: 761px) and (hover: hover) and (pointer: fine) {
+  .touch { display: none; }
+}
+/* Fenêtre desktop peu haute : colonnes latérales compactes */
+@media (min-width: 761px) and (max-height: 640px) {
+  :root { --mini: 16px; --gap: 10px; }
+  .keys, .stat.best { display: none; }
+  .stats { gap: 6px; }
+  .stat { padding: 6px 12px; }
+  .stat dd, .stat.score dd { font-size: 1.1rem; }
+  .aside { gap: .5rem; }
+}
+/* Paysage bas (téléphone couché) : panneaux latéraux compacts */
+@media (max-height: 480px) and (min-width: 561px) and (pointer: coarse) {
+  .app { grid-template-columns: auto minmax(0, 1fr) auto auto; grid-template-rows: minmax(0, 1fr); grid-template-areas: "hold stage next touch"; }
+  .hold, .next { align-self: start; }
+  .stats { display: none; }
+  .touch { grid-template-columns: repeat(2, 1fr); align-self: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  .btn:active { transform: none; }
+}
