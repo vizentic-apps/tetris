@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "name": "tetris",
+  "repo": {
+    "layout": "single",
+    "visibility": "private"
+  },
+  "components": [
+    {
+      "id": "web",
+      "kind": "web",
+      "build": "dockerfile",
+      "port": 80,
+      "domain": "@",
+      "health": "/",
+      "pwa": true
+    }
+  ]
+}
